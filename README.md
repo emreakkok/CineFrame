@@ -23,7 +23,7 @@ Her gün yeni bir film bulmacası! 6 görsel ipucuyla filmi tahmin edin.
 ### 1. Projeyi Klonlayın
 
 ```bash
-git clone https://github.com/KULLANICI_ADINIZ/CineFrame.git
+git clone https://github.com/emreakkok/CineFrame.git
 cd CineFrame
 ```
 
