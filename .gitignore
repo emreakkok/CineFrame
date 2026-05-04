@@ -1,0 +1,28 @@
+# ================================
+# CineFrame — .gitignore
+# ================================
+
+# Veritabanı (her ortamda ayrı oluşturulur)
+database.sqlite
+database.sqlite-wal
+database.sqlite-shm
+
+# Konfigürasyon (hassas bilgiler — API key, şifreler)
+config.php
+
+# Yüklenen görseller (kullanıcı tarafından yönetilir)
+assets/uploads/*
+!assets/uploads/.gitkeep
+
+# Geliştirme notları
+PLAN.md
+TASKS.md
+
+# IDE ve editör dosyaları
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db

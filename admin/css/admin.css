@@ -1,0 +1,288 @@
+/* ==============================================
+   CineFrame Admin — Stil Dosyası
+   Aynı koyu sinema teması, admin bileşenleri
+   ============================================== */
+
+/* --- Değişkenler (ana tema ile aynı) --- */
+:root {
+    --bg-primary: #0a0a0f;
+    --bg-secondary: #12121c;
+    --bg-card: rgba(255,255,255,0.04);
+    --bg-card-hover: rgba(255,255,255,0.08);
+    --glass-bg: rgba(255,255,255,0.06);
+    --glass-border: rgba(255,255,255,0.1);
+    --gold: #e2b340;
+    --gold-light: #f0d060;
+    --gold-dark: #c49a2a;
+    --red: #e74c3c;
+    --green: #2ecc71;
+    --text-primary: #f0f0f0;
+    --text-secondary: #a0a0b0;
+    --text-muted: #606070;
+    --font-body: 'Inter', system-ui, sans-serif;
+    --font-heading: 'Outfit', 'Inter', sans-serif;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    background-image:
+        radial-gradient(ellipse at 20% 0%, rgba(226,179,64,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 100%, rgba(100,60,180,0.04) 0%, transparent 60%);
+}
+
+a { color: var(--gold); text-decoration: none; }
+
+/* --- Login Sayfası --- */
+.login-container {
+    min-height: 100vh; display: flex;
+    align-items: center; justify-content: center; padding: 1rem;
+}
+
+.login-card {
+    background: var(--bg-secondary); border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg); padding: 2.5rem;
+    max-width: 400px; width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+.login-header { text-align: center; margin-bottom: 2rem; }
+.login-icon { font-size: 3rem; display: block; margin-bottom: 0.5rem; }
+.login-header h1 {
+    font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.login-header p { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.4rem; }
+
+.login-form { display: flex; flex-direction: column; gap: 1rem; }
+
+.back-link {
+    display: block; text-align: center; margin-top: 1.5rem;
+    font-size: 0.85rem; color: var(--text-muted);
+    transition: color var(--transition);
+}
+.back-link:hover { color: var(--gold); }
+
+/* --- Form Elements --- */
+.form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+.form-group label {
+    font-size: 0.8rem; font-weight: 600;
+    color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+.admin-input, .admin-select {
+    padding: 0.75rem 1rem;
+    background: var(--glass-bg); border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm); color: var(--text-primary);
+    font-family: var(--font-body); font-size: 0.9rem;
+    transition: border-color var(--transition), box-shadow var(--transition);
+    outline: none;
+}
+.admin-input:focus, .admin-select:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 15px rgba(226,179,64,0.15);
+}
+.admin-select { cursor: pointer; }
+.admin-select option { background: var(--bg-secondary); color: var(--text-primary); }
+
+.btn-login, .btn-primary {
+    padding: 0.75rem 2rem;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: var(--bg-primary); border: none; border-radius: var(--radius-sm);
+    font-family: var(--font-body); font-size: 0.95rem; font-weight: 600;
+    cursor: pointer; transition: all var(--transition);
+}
+.btn-login:hover, .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(226,179,64,0.3);
+}
+
+/* --- Alert Messages --- */
+.alert {
+    padding: 0.75rem 1rem; border-radius: var(--radius-sm);
+    font-size: 0.85rem; margin-bottom: 1rem;
+}
+.alert-error {
+    background: rgba(231,76,60,0.12); border: 1px solid rgba(231,76,60,0.3);
+    color: var(--red);
+}
+.alert-success {
+    background: rgba(46,204,113,0.12); border: 1px solid rgba(46,204,113,0.3);
+    color: var(--green);
+}
+
+/* --- Admin Header --- */
+.admin-header {
+    background: rgba(10,10,15,0.9); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+    position: sticky; top: 0; z-index: 100;
+}
+.admin-header-inner {
+    max-width: 1000px; margin: 0 auto;
+    padding: 0.75rem 1.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.admin-logo { display: flex; align-items: center; gap: 0.5rem; }
+.admin-logo span { font-size: 1.4rem; }
+.admin-logo h1 {
+    font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.admin-nav { display: flex; align-items: center; gap: 1rem; }
+.admin-user { font-size: 0.85rem; color: var(--text-muted); }
+.btn-logout {
+    padding: 0.4rem 1rem; background: rgba(231,76,60,0.15);
+    border: 1px solid rgba(231,76,60,0.3); border-radius: var(--radius-sm);
+    color: var(--red); font-size: 0.8rem; font-weight: 600;
+    transition: all var(--transition);
+}
+.btn-logout:hover { background: rgba(231,76,60,0.25); }
+
+/* --- Admin Main --- */
+.admin-main { max-width: 1000px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+.admin-section {
+    background: var(--bg-secondary); border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg); padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+.admin-section h2 {
+    font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+.section-desc { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem; }
+
+/* --- TMDB Search (Admin) --- */
+.tmdb-search-wrapper { position: relative; }
+
+.admin-tmdb-results {
+    margin-top: 0.5rem; max-height: 400px; overflow-y: auto;
+    display: flex; flex-direction: column; gap: 6px;
+}
+
+.tmdb-result-item {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 0.75rem; background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm); cursor: pointer;
+    transition: all var(--transition);
+}
+.tmdb-result-item:hover {
+    background: rgba(226,179,64,0.08); border-color: rgba(226,179,64,0.3);
+}
+.tmdb-result-poster {
+    width: 45px; height: 65px; object-fit: cover;
+    border-radius: 4px; background: var(--bg-card); flex-shrink: 0;
+}
+.tmdb-result-info { flex: 1; min-width: 0; }
+.tmdb-result-title { font-size: 0.9rem; font-weight: 600; }
+.tmdb-result-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+.tmdb-result-btn {
+    padding: 0.4rem 0.8rem; background: rgba(46,204,113,0.15);
+    border: 1px solid rgba(46,204,113,0.3); border-radius: var(--radius-sm);
+    color: var(--green); font-size: 0.75rem; font-weight: 600;
+    cursor: pointer; transition: all var(--transition); white-space: nowrap;
+}
+.tmdb-result-btn:hover { background: rgba(46,204,113,0.25); }
+.tmdb-result-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* --- Image Upload Grid --- */
+.image-upload-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 10px; margin-bottom: 1.25rem;
+}
+
+.upload-slot { position: relative; }
+
+.upload-label {
+    display: block; cursor: pointer;
+    transition: all var(--transition);
+}
+
+.upload-preview {
+    aspect-ratio: 16/10; border-radius: var(--radius-sm);
+    background: var(--bg-card); border: 2px dashed var(--glass-border);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 0.4rem;
+    color: var(--text-muted); font-size: 0.75rem;
+    transition: all var(--transition); overflow: hidden;
+    position: relative;
+}
+.upload-preview:hover { border-color: var(--gold); color: var(--gold); }
+.upload-preview.has-image { border-style: solid; border-color: var(--green); }
+.upload-preview.has-image img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+}
+
+.upload-number {
+    position: absolute; top: 6px; left: 6px; z-index: 2;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--gold); color: var(--bg-primary);
+    font-size: 0.7rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+}
+
+.upload-input { display: none; }
+
+/* --- Date Form --- */
+.form-row {
+    display: flex; gap: 1rem; align-items: flex-end;
+}
+.form-row .form-group { flex: 1; }
+.btn-assign { white-space: nowrap; height: fit-content; }
+
+/* --- Admin Table --- */
+.dates-table-wrapper { overflow-x: auto; }
+
+.admin-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 0.85rem;
+}
+.admin-table th, .admin-table td {
+    padding: 0.65rem 0.75rem; text-align: left;
+    border-bottom: 1px solid var(--glass-border);
+}
+.admin-table th {
+    font-size: 0.75rem; font-weight: 600;
+    color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;
+}
+.empty-cell { text-align: center; color: var(--text-muted); padding: 2rem !important; }
+
+.btn-delete {
+    font-size: 1rem; cursor: pointer;
+    transition: transform var(--transition);
+    text-decoration: none;
+}
+.btn-delete:hover { transform: scale(1.2); }
+
+/* --- Spinner --- */
+.spinner {
+    width: 20px; height: 20px;
+    border: 2px solid var(--glass-border); border-top-color: var(--gold);
+    border-radius: 50%; animation: spin 0.8s linear infinite;
+    margin: 0 auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* --- Responsive --- */
+@media (max-width: 600px) {
+    .image-upload-grid { grid-template-columns: repeat(2, 1fr); }
+    .form-row { flex-direction: column; }
+    .admin-header-inner { flex-direction: column; gap: 0.5rem; }
+}
+
+/* --- Scrollbar --- */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
