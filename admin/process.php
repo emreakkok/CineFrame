@@ -37,8 +37,14 @@ switch ($action) {
     case 'assign_date':
         handleAssignDate($pdo);
         break;
+    case 'assign_poster_date':
+        handleAssignPosterDate($pdo);
+        break;
     case 'delete_date':
         handleDeleteDate($pdo);
+        break;
+    case 'delete_poster_date':
+        handleDeletePosterDate($pdo);
         break;
     default:
         header('Location: dashboard.php');
@@ -260,6 +266,64 @@ function handleDeleteDate(PDO $pdo): void
     try {
         $pdo->prepare("DELETE FROM game_dates WHERE id = :id")->execute([':id' => $id]);
         $_SESSION['flash_success'] = 'Tarih ataması silindi.';
+    } catch (PDOException $e) {
+        $_SESSION['flash_error'] = 'Silme hatası: ' . $e->getMessage();
+    }
+
+    header('Location: dashboard.php');
+    exit;
+}
+
+/**
+ * Filme Poster oyun tarihi ata.
+ */
+function handleAssignPosterDate(PDO $pdo): void
+{
+    $movieId  = intval($_POST['movie_id'] ?? 0);
+    $gameDate = trim($_POST['game_date'] ?? '');
+
+    if ($movieId <= 0 || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $gameDate)) {
+        $_SESSION['flash_error'] = 'Geçersiz film veya tarih.';
+        header('Location: dashboard.php');
+        exit;
+    }
+
+    try {
+        $stmt = $pdo->prepare("
+            INSERT INTO poster_game_dates (movie_id, game_date)
+            VALUES (:mid, :date)
+        ");
+        $stmt->execute([':mid' => $movieId, ':date' => $gameDate]);
+
+        $_SESSION['flash_success'] = "Poster Tarihi başarıyla atandı: {$gameDate}";
+    } catch (PDOException $e) {
+        if (strpos($e->getMessage(), 'UNIQUE') !== false) {
+            $_SESSION['flash_error'] = "Bu Poster tarihi ({$gameDate}) zaten başka bir filme atanmış.";
+        } else {
+            $_SESSION['flash_error'] = 'Veritabanı hatası: ' . $e->getMessage();
+        }
+    }
+
+    header('Location: dashboard.php');
+    exit;
+}
+
+/**
+ * Poster oyun tarihi atamasını sil.
+ */
+function handleDeletePosterDate(PDO $pdo): void
+{
+    $id = intval($_GET['id'] ?? 0);
+
+    if ($id <= 0) {
+        $_SESSION['flash_error'] = 'Geçersiz tarih ID.';
+        header('Location: dashboard.php');
+        exit;
+    }
+
+    try {
+        $pdo->prepare("DELETE FROM poster_game_dates WHERE id = :id")->execute([':id' => $id]);
+        $_SESSION['flash_success'] = 'Poster Tarih ataması silindi.';
     } catch (PDOException $e) {
         $_SESSION['flash_error'] = 'Silme hatası: ' . $e->getMessage();
     }

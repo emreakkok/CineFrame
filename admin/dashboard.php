@@ -23,6 +23,19 @@ $pdo->exec('PRAGMA foreign_keys = ON');
 $movies = $pdo->query("SELECT m.*, gd.game_date FROM movies m LEFT JOIN game_dates gd ON m.id = gd.movie_id ORDER BY m.id DESC")->fetchAll();
 $gameDates = $pdo->query("SELECT gd.*, m.title, m.title_en FROM game_dates gd JOIN movies m ON gd.movie_id = m.id ORDER BY gd.game_date DESC")->fetchAll();
 
+// CREATE poster_game_dates if not exists (Migration)
+$pdo->exec("
+    CREATE TABLE IF NOT EXISTS poster_game_dates (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        movie_id INTEGER NOT NULL,
+        game_date DATE NOT NULL UNIQUE,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE
+    )
+");
+
+$posterGameDates = $pdo->query("SELECT pgd.*, m.title, m.title_en FROM poster_game_dates pgd JOIN movies m ON pgd.movie_id = m.id ORDER BY pgd.game_date DESC")->fetchAll();
+
 // Başarı/hata mesajları (session flash)
 $success = $_SESSION['flash_success'] ?? '';
 $error = $_SESSION['flash_error'] ?? '';
@@ -120,12 +133,9 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
             </form>
         </section>
 
-        <!-- ================================== -->
-        <!-- BÖLÜM 3: Oyun Tarihi Atama        -->
-        <!-- ================================== -->
         <section class="admin-section">
-            <h2>📅 Oyun Tarihi Atama</h2>
-            <p class="section-desc">Bir film seçin ve oynanacağı tarihi belirleyin.</p>
+            <h2>📅 Frame Modu Tarih Atama</h2>
+            <p class="section-desc">Bir film seçin ve Frame modu oynanacağı tarihi belirleyin.</p>
 
             <form method="POST" action="process.php?action=assign_date" class="date-form">
                 <div class="form-row">
@@ -148,10 +158,37 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
         </section>
 
         <!-- ================================== -->
-        <!-- BÖLÜM 4: Mevcut Oyun Tarihleri    -->
+        <!-- BÖLÜM 4: Poster Modu Tarih Atama  -->
         <!-- ================================== -->
         <section class="admin-section">
-            <h2>📋 Atanmış Oyun Tarihleri</h2>
+            <h2>📅 Poster Modu Tarih Atama</h2>
+            <p class="section-desc">Bir film seçin ve Poster modu oynanacağı tarihi belirleyin.</p>
+
+            <form method="POST" action="process.php?action=assign_poster_date" class="date-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="poster-date-movie-id">Film</label>
+                        <select id="poster-date-movie-id" name="movie_id" class="admin-select" required>
+                            <option value="">— Film Seçin —</option>
+                            <?php foreach ($movies as $m): ?>
+                                <option value="<?= $m['id'] ?>"><?= htmlspecialchars($m['title']) ?> (<?= $m['year'] ?>)</option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="poster-game-date">Tarih</label>
+                        <input type="date" id="poster-game-date" name="game_date" class="admin-input" required>
+                    </div>
+                    <button type="submit" class="btn-primary btn-assign">📅 Poster Ata</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- ================================== -->
+        <!-- BÖLÜM 5: Mevcut Oyun Tarihleri    -->
+        <!-- ================================== -->
+        <section class="admin-section">
+            <h2>📋 Atanmış Frame Tarihleri</h2>
             <div class="dates-table-wrapper">
                 <table class="admin-table">
                     <thead>
@@ -164,7 +201,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                     </thead>
                     <tbody>
                         <?php if (empty($gameDates)): ?>
-                            <tr><td colspan="4" class="empty-cell">Henüz atanmış tarih yok.</td></tr>
+                            <tr><td colspan="4" class="empty-cell">Henüz atanmış Frame tarihi yok.</td></tr>
                         <?php else: ?>
                             <?php foreach ($gameDates as $gd): ?>
                                 <tr>
@@ -174,7 +211,39 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                                     <td>
                                         <a href="process.php?action=delete_date&id=<?= $gd['id'] ?>"
                                            class="btn-delete"
-                                           onclick="return confirm('Bu tarih atamasını silmek istediğinize emin misiniz?')">🗑️</a>
+                                           onclick="return confirm('Bu Frame tarih atamasını silmek istediğinize emin misiniz?')">🗑️</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h2 style="margin-top: 2rem;">📋 Atanmış Poster Tarihleri</h2>
+            <div class="dates-table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Tarih</th>
+                            <th>Film (TR)</th>
+                            <th>Film (EN)</th>
+                            <th>İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (empty($posterGameDates)): ?>
+                            <tr><td colspan="4" class="empty-cell">Henüz atanmış Poster tarihi yok.</td></tr>
+                        <?php else: ?>
+                            <?php foreach ($posterGameDates as $pgd): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($pgd['game_date']) ?></td>
+                                    <td><?= htmlspecialchars($pgd['title']) ?></td>
+                                    <td><?= htmlspecialchars($pgd['title_en']) ?></td>
+                                    <td>
+                                        <a href="process.php?action=delete_poster_date&id=<?= $pgd['id'] ?>"
+                                           class="btn-delete"
+                                           onclick="return confirm('Bu Poster tarih atamasını silmek istediğinize emin misiniz?')">🗑️</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

@@ -4,13 +4,15 @@ Her gün yeni bir film bulmacası! 6 görsel ipucuyla filmi tahmin edin.
 
 ## 📋 Özellikler
 
-- **Günlük Bulmaca**: Her gün yeni bir film sorulur
-- **6 Görsel İpucu**: Her yanlış tahminde yeni bir görsel açılır
-- **TMDB Entegrasyonu**: Arama çubuğunda anlık film önerileri
-- **Admin Paneli**: Film ekleme, görsel yükleme, tarih atama
-- **Arşiv**: Geçmiş günlerin bulmacalarını oynayabilirsiniz
-- **Responsive Tasarım**: Mobil ve masaüstü uyumlu
-- **Koyu Tema**: Sinematik, premium arayüz
+- **Çift Oyun Modu:**
+  - 🖼️ **Frame Modu**: Her yanlış tahminde 6 farklı sahneden yeni bir görsel açılır.
+  - 🎟️ **Poster Modu**: Poster başlangıçta aşırı bulanıktır ve sadece küçük bir kısmı görünür, her yanlış tahminde poster daha da açılır.
+- **Günlük Bulmaca**: Her gün yeni bir film sorulur.
+- **TMDB Entegrasyonu**: Arama çubuğunda anlık film önerileri ve otomatik poster çekimi.
+- **Admin Paneli**: Her iki mod için film ekleme, görsel yükleme, özel tarih atama.
+- **Arşiv**: Geçmiş günlerin bulmacalarını oynayabilirsiniz.
+- **Responsive Tasarım**: Mobil ve masaüstü uyumlu.
+- **Koyu Tema**: Sinematik, premium arayüz.
 
 ## 🛠️ Gereksinimler
 
@@ -57,7 +59,7 @@ http://localhost/CineFrame/setup.php
 
 Bu işlem:
 - `database.sqlite` dosyasını oluşturur
-- Gerekli tabloları kurar (movies, game_dates, movie_images, admin_users)
+- Gerekli tabloları kurar (movies, game_dates, poster_game_dates, movie_images, admin_users)
 - Varsayılan admin kullanıcısı oluşturur (`admin` / `admin123`)
 - Veritabanı **boş** oluşturulur — filmler admin panelinden eklenir
 
@@ -82,12 +84,14 @@ http://localhost/CineFrame/
 
 ```
 CineFrame/
-├── index.php              → Ana oyun sayfası (slider UI)
+├── index.php              → Ana oyun sayfası (Frame UI)
+├── poster.php             → Poster modu ana sayfası
 ├── setup.php              → Veritabanı kurulumu (bir kez çalıştırılır)
 ├── config.php             → Hassas ayarlar (API key) — GİT'E YÜKLENMEZ
 ├── config.example.php     → Konfigürasyon şablonu
 ├── api/
-│   ├── game.php           → Backend oyun API'si
+│   ├── game.php           → Frame Modu oyun API'si
+│   ├── poster_game.php    → Poster Modu oyun API'si
 │   └── tmdb_proxy.php     → TMDB API proxy (key sunucuda kalır)
 ├── admin/
 │   ├── admin.php          → Admin giriş sayfası
@@ -95,8 +99,12 @@ CineFrame/
 │   ├── process.php        → Admin işlem endpoint'leri
 │   ├── css/admin.css      → Admin panel stilleri
 │   └── js/admin.js        → Admin panel JS
-├── css/style.css          → Oyun arayüzü stilleri
-├── js/app.js              → Frontend mantığı (slider, state)
+├── css/
+│   ├── style.css          → Frame oyun arayüzü stilleri
+│   └── poster.css         → Poster oyun arayüzü stilleri
+├── js/
+│   ├── app.js             → Frame modu mantığı
+│   └── poster.js          → Poster modu mantığı
 ├── assets/uploads/        → Yüklenen görseller — GİT'E YÜKLENMEZ
 ├── .gitignore
 └── README.md
@@ -114,12 +122,14 @@ CineFrame/
 
 ## 🎮 Nasıl Oynanır?
 
-1. Sayfa açıldığında ilk görsel ipucu gösterilir
-2. Arama çubuğuna film adı yazarak TMDB'den arayın
-3. Listeden bir film seçerek tahmin edin
-4. Yanlış tahminlerde yeni görsel ipuçları açılır
-5. 6 tahmin hakkınız var — ne kadar az tahminde bilirseniz o kadar iyi!
-6. Geçmiş bulmacaları **Arşiv** butonundan oynayabilirsiniz
+- **Genel Akış:**
+  1. Arama çubuğuna film adı yazarak TMDB'den arayın.
+  2. Listeden bir film seçerek tahmin edin.
+  3. 6 tahmin hakkınız var — ne kadar az tahminde bilirseniz o kadar iyi!
+  4. Geçmiş bulmacaları **Arşiv** butonundan oynayabilirsiniz.
+
+- **Frame Modu:** Yanlış tahminlerde yeni görsel sahneler (ipuçları) açılır.
+- **Poster Modu:** Yanlış tahminlerde gizlenmiş veya çok bulanık olan film afişi yavaş yavaş netleşerek görünür hale gelir.
 
 ## 🔧 Teknolojiler
 

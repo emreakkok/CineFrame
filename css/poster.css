@@ -1,0 +1,111 @@
+/* CineFrame Poster Modu Özel CSS */
+
+.mode-switch {
+    background: rgba(226, 179, 64, 0.15) !important;
+    color: #e2b340 !important;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid rgba(226, 179, 64, 0.3) !important;
+}
+.mode-switch:hover {
+    background: rgba(226, 179, 64, 0.25) !important;
+}
+
+/* Poster Alanı */
+.poster-area {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto 2rem auto;
+    aspect-ratio: 2 / 3;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.poster-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.poster-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: clip-path 0.8s cubic-bezier(0.25, 1, 0.5, 1), filter 0.8s ease;
+    /* Default is hidden/fully blurred before JS loads it */
+    filter: blur(20px);
+}
+
+.poster-image.no-transition {
+    transition: none !important;
+}
+
+/* 
+   "Her tahminde bir kısmı açılacak ve genişleyecek"
+   6 tahmin hakkı var. Başlangıçta (level 0) çok küçük bir kısım görünür.
+*/
+
+.poster-image.reveal-0 {
+    clip-path: circle(10% at center);
+    filter: blur(10px) brightness(0.7);
+}
+
+.poster-image.reveal-1 {
+    clip-path: circle(20% at center);
+    filter: blur(8px) brightness(0.8);
+}
+
+.poster-image.reveal-2 {
+    clip-path: circle(35% at center);
+    filter: blur(6px) brightness(0.9);
+}
+
+.poster-image.reveal-3 {
+    clip-path: circle(55% at center);
+    filter: blur(4px) brightness(0.95);
+}
+
+.poster-image.reveal-4 {
+    clip-path: circle(75% at center);
+    filter: blur(2px) brightness(1);
+}
+
+.poster-image.reveal-5 {
+    clip-path: circle(100% at center);
+    filter: blur(1px) brightness(1);
+}
+
+/* Doğru tahmin edildiğinde veya oyun kaybedildiğinde tam afiş */
+.poster-image.reveal-full {
+    clip-path: circle(150% at center); /* to cover corners fully */
+    filter: blur(0px) brightness(1);
+}
+
+/* Loading durumu */
+.poster-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: #e2b340;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
