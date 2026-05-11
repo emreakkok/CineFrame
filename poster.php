@@ -23,6 +23,7 @@
             </div>
             <nav class="header-nav">
                 <a href="index.php" class="nav-btn mode-switch" title="Frame Moduna Geç">🖼️ Frame Modu</a>
+                <a href="cast.php" class="nav-btn mode-switch" title="Kadro Moduna Geç">🎭 Kadro Modu</a>
                 <button id="btn-how-to-play" class="nav-btn" title="Nasıl Oynanır?">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="10"/>

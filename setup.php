@@ -66,6 +66,17 @@ try {
         )
     ");
 
+    // Kadro (Cast) Oyun Tarihleri tablosu
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS cast_game_dates (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            movie_id INTEGER NOT NULL,
+            game_date DATE NOT NULL UNIQUE,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE
+        )
+    ");
+
     // Görseller tablosu (her film için 6 görsel ipucu)
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS movie_images (

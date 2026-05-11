@@ -34,7 +34,30 @@ $pdo->exec("
     )
 ");
 
+// CREATE cast_game_dates if not exists (Migration)
+$pdo->exec("
+    CREATE TABLE IF NOT EXISTS cast_game_dates (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        movie_id INTEGER NOT NULL,
+        game_date DATE NOT NULL UNIQUE,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE
+    )
+");
+
+// Add columns to movies if they don't exist
+try {
+    $pdo->exec("ALTER TABLE movies ADD COLUMN genre TEXT");
+    $pdo->exec("ALTER TABLE movies ADD COLUMN cast_lead TEXT");
+    $pdo->exec("ALTER TABLE movies ADD COLUMN cast_second TEXT");
+    $pdo->exec("ALTER TABLE movies ADD COLUMN cast_third TEXT");
+    $pdo->exec("ALTER TABLE movies ADD COLUMN runtime INTEGER");
+} catch (PDOException $e) {
+    // Columns already exist, ignore
+}
+
 $posterGameDates = $pdo->query("SELECT pgd.*, m.title, m.title_en FROM poster_game_dates pgd JOIN movies m ON pgd.movie_id = m.id ORDER BY pgd.game_date DESC")->fetchAll();
+$castGameDates = $pdo->query("SELECT cgd.*, m.title, m.title_en FROM cast_game_dates cgd JOIN movies m ON cgd.movie_id = m.id ORDER BY cgd.game_date DESC")->fetchAll();
 
 // Başarı/hata mesajları (session flash)
 $success = $_SESSION['flash_success'] ?? '';
@@ -50,7 +73,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/admin.css?v=<?= time() ?>">
 </head>
 <body>
     <!-- Header -->
@@ -185,6 +208,33 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
         </section>
 
         <!-- ================================== -->
+        <!-- BÖLÜM 4.5: Kadro Modu Tarih Atama  -->
+        <!-- ================================== -->
+        <section class="admin-section">
+            <h2>📅 Kadro (Cast) Modu Tarih Atama</h2>
+            <p class="section-desc">Bir film seçin ve Kadro modu oynanacağı tarihi belirleyin.</p>
+
+            <form method="POST" action="process.php?action=assign_cast_date" class="date-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cast-date-movie-id">Film</label>
+                        <select id="cast-date-movie-id" name="movie_id" class="admin-select" required>
+                            <option value="">— Film Seçin —</option>
+                            <?php foreach ($movies as $m): ?>
+                                <option value="<?= $m['id'] ?>"><?= htmlspecialchars($m['title']) ?> (<?= $m['year'] ?>)</option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cast-game-date">Tarih</label>
+                        <input type="date" id="cast-game-date" name="game_date" class="admin-input" required>
+                    </div>
+                    <button type="submit" class="btn-primary btn-assign">📅 Kadro Ata</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- ================================== -->
         <!-- BÖLÜM 5: Mevcut Oyun Tarihleri    -->
         <!-- ================================== -->
         <section class="admin-section">
@@ -244,6 +294,38 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                                         <a href="process.php?action=delete_poster_date&id=<?= $pgd['id'] ?>"
                                            class="btn-delete"
                                            onclick="return confirm('Bu Poster tarih atamasını silmek istediğinize emin misiniz?')">🗑️</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 style="margin-top: 2rem;">📋 Atanmış Kadro Tarihleri</h2>
+            <div class="dates-table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Tarih</th>
+                            <th>Film (TR)</th>
+                            <th>Film (EN)</th>
+                            <th>İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (empty($castGameDates)): ?>
+                            <tr><td colspan="4" class="empty-cell">Henüz atanmış Kadro tarihi yok.</td></tr>
+                        <?php else: ?>
+                            <?php foreach ($castGameDates as $cgd): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($cgd['game_date']) ?></td>
+                                    <td><?= htmlspecialchars($cgd['title']) ?></td>
+                                    <td><?= htmlspecialchars($cgd['title_en']) ?></td>
+                                    <td>
+                                        <a href="process.php?action=delete_cast_date&id=<?= $cgd['id'] ?>"
+                                           class="btn-delete"
+                                           onclick="return confirm('Bu Kadro tarih atamasını silmek istediğinize emin misiniz?')">🗑️</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

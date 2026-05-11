@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CineFrame - Her gün yeni bir film tahmin et! 6 görsel ipucuyla filmi bul.">
-    <meta name="keywords" content="film tahmin, günlük oyun, sinema, film quiz, CineFrame">
+    <meta name="description" content="CineFrame - Her gün yeni bir film tahmin et! Kadro ipuçlarıyla filmi bul.">
+    <meta name="keywords" content="film tahmin, günlük oyun, sinema, film quiz, CineFrame, Kadro, Cast">
     <meta name="author" content="CineFrame">
-    <title>CineFrame — Günlük Film Tahmin Oyunu</title>
+    <title>CineFrame — Günlük Kadro (Cast) Tahmin Oyunu</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Stil dosyası -->
+    <!-- Stil dosyaları -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/cast.css">
 </head>
 <body>
 
@@ -24,12 +25,12 @@
     <header id="main-header">
         <div class="header-inner">
             <div class="logo" id="logo">
-                <span class="logo-icon">🎬</span>
-                <h1>CineFrame</h1>
+                <span class="logo-icon">🎭</span>
+                <h1>CineFrame <span class="mode-badge">Kadro</span></h1>
             </div>
             <nav class="header-nav">
+                <a href="index.php" class="nav-btn mode-switch" title="Frame Moduna Geç">🖼️ Frame Modu</a>
                 <a href="poster.php" class="nav-btn mode-switch" title="Poster Moduna Geç">🎟️ Poster Modu</a>
-                <a href="cast.php" class="nav-btn mode-switch" title="Kadro Moduna Geç">🎭 Kadro Modu</a>
                 <button id="btn-how-to-play" class="nav-btn" title="Nasıl Oynanır?">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="10"/>
@@ -59,14 +60,13 @@
 
         <!-- ============================================ -->
         <!-- OYUN YOK DURUMU (Empty State) -->
-        <!-- JS tarafından oyun bulunamadığında gösterilir -->
         <!-- ============================================ -->
         <div id="empty-state" class="empty-state hidden">
             <div class="empty-state-card">
-                <div class="empty-state-icon">🎞️</div>
-                <h2 id="empty-state-title" class="empty-state-title">Henüz bir oyun hazırlanmadı</h2>
+                <div class="empty-state-icon">🎭</div>
+                <h2 id="empty-state-title" class="empty-state-title">Henüz bir Kadro oyunu hazırlanmadı</h2>
                 <p id="empty-state-message" class="empty-state-message">
-                    Bugün için atanmış bir film bulmacası bulunmuyor. Lütfen daha sonra tekrar deneyin!
+                    Bugün için atanmış bir Kadro bulmacası bulunmuyor. Lütfen daha sonra tekrar deneyin!
                 </p>
                 <div class="empty-state-strip">
                     <span></span><span></span><span></span><span></span><span></span>
@@ -75,33 +75,38 @@
             </div>
         </div>
 
-        <!-- Tekil Görsel Slider -->
-        <section id="image-slider" class="image-slider" aria-label="Film Görsel İpuçları">
-            <!-- Slider ana görseli -->
-            <div class="slider-viewport">
-                <img id="slider-image" class="slider-image" src="" alt="Film ipucu görseli">
-                <!-- Önceki / Sonraki okları -->
-                <button id="btn-slider-prev" class="slider-arrow slider-arrow-prev" aria-label="Önceki görsel" disabled>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <polyline points="15 18 9 12 15 6"/>
-                    </svg>
-                </button>
-                <button id="btn-slider-next" class="slider-arrow slider-arrow-next" aria-label="Sonraki görsel" disabled>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <polyline points="9 6 15 12 9 18"/>
-                    </svg>
-                </button>
-                <!-- Görsel numarası göstergesi -->
-                <div id="slider-counter" class="slider-counter">1 / 6</div>
+        <!-- ============================================ -->
+        <!-- İPUÇLARI (Clues) -->
+        <!-- ============================================ -->
+        <section id="cast-clues-container" class="cast-clues-container hidden">
+            <div class="cast-clues-header">
+                <h2>Kadro İpuçları</h2>
+                <p>Her yanlış tahmin veya geçme işleminde yeni bir ipucu açılır.</p>
             </div>
-            <!-- Navigasyon noktaları -->
-            <div id="slider-dots" class="slider-dots">
-                <!-- JS tarafından 6 dot oluşturulacak -->
+            <div class="cast-clue-item" id="clue-1">
+                <div class="clue-label">Vizyon Yılı ve Tür</div>
+                <div class="clue-value skeleton">????</div>
+            </div>
+            <div class="cast-clue-item" id="clue-2">
+                <div class="clue-label">Yönetmen</div>
+                <div class="clue-value skeleton">????</div>
+            </div>
+            <div class="cast-clue-item" id="clue-3">
+                <div class="clue-label">Yardımcı Oyuncu</div>
+                <div class="clue-value skeleton">????</div>
+            </div>
+            <div class="cast-clue-item" id="clue-4">
+                <div class="clue-label">Yardımcı Oyuncu</div>
+                <div class="clue-value skeleton">????</div>
+            </div>
+            <div class="cast-clue-item" id="clue-5">
+                <div class="clue-label">Başrol Oyuncusu</div>
+                <div class="clue-value skeleton">????</div>
             </div>
         </section>
 
         <!-- Tahmin Hakkı Göstergesi -->
-        <div id="guess-counter" class="guess-counter">
+        <div id="guess-counter" class="guess-counter hidden">
             <div id="guess-dots" class="guess-dots">
                 <!-- JS tarafından 6 dot oluşturulacak -->
             </div>
@@ -109,7 +114,7 @@
         </div>
 
         <!-- Arama / Tahmin Girişi -->
-        <div id="search-container" class="search-container">
+        <div id="search-container" class="search-container hidden">
             <div class="search-wrapper">
                 <div class="search-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -132,7 +137,7 @@
         </div>
 
         <!-- Tahmin Geçmişi -->
-        <section id="guess-history" class="guess-history">
+        <section id="guess-history" class="guess-history hidden">
             <ul id="guess-list" class="guess-list"></ul>
         </section>
 
@@ -162,7 +167,7 @@
                 </div>
                 <div class="stat-item">
                     <span class="stat-value" id="stat-images">0</span>
-                    <span class="stat-label">Görsel</span>
+                    <span class="stat-label">İpucu</span>
                 </div>
             </div>
             <button id="btn-close-result" class="btn-primary">Tamam</button>
@@ -175,7 +180,7 @@
     <div id="archive-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
         <div class="modal-content archive-modal-content">
             <div class="modal-header">
-                <h2>📅 Arşiv — Geçmiş Bulmacalar</h2>
+                <h2>📅 Arşiv — Kadro Modu</h2>
                 <button id="btn-close-archive" class="modal-close" aria-label="Kapat">&times;</button>
             </div>
             <div id="archive-list" class="archive-list">
@@ -190,29 +195,29 @@
     <div id="howto-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
         <div class="modal-content howto-modal-content">
             <div class="modal-header">
-                <h2>🎬 Nasıl Oynanır?</h2>
+                <h2>🎬 Nasıl Oynanır? (Kadro Modu)</h2>
                 <button id="btn-close-howto" class="modal-close" aria-label="Kapat">&times;</button>
             </div>
             <div class="howto-body">
                 <div class="howto-step">
                     <span class="step-number">1</span>
-                    <p>Her gün yeni bir film bulmacası yayınlanır. Filmin sahnelerinden ipuçları verilir.</p>
+                    <p>Her gün yeni bir filmin Kadro / Ekip bulmacası yayınlanır. Bu modda görsel ipucu yoktur.</p>
                 </div>
                 <div class="howto-step">
                     <span class="step-number">2</span>
-                    <p>İlk görselle başlarsınız. Arama çubuğuna film adı yazarak tahmin edin.</p>
+                    <p>İlk aşamada sadece arama çubuğu açıktır. Tahminde bulunun veya geçin.</p>
                 </div>
                 <div class="howto-step">
                     <span class="step-number">3</span>
-                    <p>Her yanlış tahminde yeni bir görsel ipucu açılır. Daha fazla görsel = daha kolay tahmin!</p>
+                    <p>Her yanlış tahminde yeni bir bilgi (Yıl/Tür, Yönetmen, Yardımcı Oyuncular, Başrol) açılır.</p>
                 </div>
                 <div class="howto-step">
                     <span class="step-number">4</span>
-                    <p>Toplam <strong>6 tahmin hakkınız</strong> var. Mümkün olduğunca az tahminde bilmeye çalışın.</p>
+                    <p>Toplam <strong>6 tahmin hakkınız</strong> var. İpuçlarını kullanarak filmi bulun.</p>
                 </div>
                 <div class="howto-step">
                     <span class="step-number">5</span>
-                    <p>Geçmiş bulmacaları <strong>Arşiv</strong> bölümünden oynayabilirsiniz.</p>
+                    <p>Geçmiş Kadro bulmacalarını <strong>Arşiv</strong> bölümünden oynayabilirsiniz.</p>
                 </div>
             </div>
         </div>
@@ -228,6 +233,6 @@
     </footer>
 
     <!-- JavaScript dosyası -->
-    <script src="js/app.js"></script>
+    <script src="js/cast.js"></script>
 </body>
 </html>

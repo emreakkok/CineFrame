@@ -42,36 +42,218 @@ body {
 
 a { color: var(--gold); text-decoration: none; }
 
-/* --- Login Sayfası --- */
-.login-container {
-    min-height: 100vh; display: flex;
-    align-items: center; justify-content: center; padding: 1rem;
+/* --- Login Sayfası (Portal) --- */
+.login-body {
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
 }
 
-.login-card {
-    background: var(--bg-secondary); border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg); padding: 2.5rem;
-    max-width: 400px; width: 100%;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+/* Arka Plan Efektleri (Dynamic Gradient Orbs) */
+.ambient-light {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.4;
+    z-index: 0;
+    animation: float 10s ease-in-out infinite alternate;
+}
+.light-1 {
+    width: 400px; height: 400px;
+    background: rgba(226, 179, 64, 0.15);
+    top: -10%; left: -10%;
+}
+.light-2 {
+    width: 500px; height: 500px;
+    background: rgba(100, 60, 180, 0.1);
+    bottom: -20%; right: -10%;
+    animation-delay: -5s;
+}
+@keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(30px, 50px) scale(1.1); }
 }
 
-.login-header { text-align: center; margin-bottom: 2rem; }
-.login-icon { font-size: 3rem; display: block; margin-bottom: 0.5rem; }
-.login-header h1 {
-    font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800;
+.portal-wrapper {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 420px;
+    padding: 2rem;
+    perspective: 1000px;
+}
+
+.portal-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 3rem 2.5rem;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+    transform-style: preserve-3d;
+    animation: cardEnter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes cardEnter {
+    from { opacity: 0; transform: translateY(40px) rotateX(10deg); }
+    to { opacity: 1; transform: translateY(0) rotateX(0); }
+}
+
+.portal-header { text-align: center; margin-bottom: 2.5rem; }
+
+.portal-icon {
+    font-size: 3.5rem;
+    line-height: 1;
+    margin-bottom: 1rem;
+    display: inline-block;
+    filter: drop-shadow(0 0 15px rgba(226, 179, 64, 0.3));
+    animation: pulseIcon 4s ease-in-out infinite;
+}
+
+@keyframes pulseIcon {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(226, 179, 64, 0.3)); }
+    50% { transform: scale(1.05); filter: drop-shadow(0 0 25px rgba(226, 179, 64, 0.5)); }
+}
+
+.portal-header h1 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #fff 0%, #a0a0b0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.portal-header h1 span {
     background: linear-gradient(135deg, var(--gold), var(--gold-light));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
-.login-header p { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.4rem; }
 
-.login-form { display: flex; flex-direction: column; gap: 1rem; }
-
-.back-link {
-    display: block; text-align: center; margin-top: 1.5rem;
-    font-size: 0.85rem; color: var(--text-muted);
-    transition: color var(--transition);
+.portal-header p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 400;
 }
-.back-link:hover { color: var(--gold); }
+
+.portal-form { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.input-group { position: relative; }
+
+.input-group input {
+    width: 100%;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 1rem 1.25rem 1rem 3rem;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    transition: var(--transition);
+    outline: none;
+}
+
+.input-group input:focus {
+    background: rgba(0,0,0,0.4);
+    border-color: var(--gold);
+    box-shadow: 0 0 20px rgba(226,179,64,0.1);
+}
+
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    transition: var(--transition);
+    display: flex;
+}
+
+.input-group input:focus + .input-icon { color: var(--gold); }
+.input-group svg { width: 18px; height: 18px; }
+
+.btn-submit {
+    margin-top: 1rem;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    padding: 1rem;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(226,179,64,0.2);
+}
+
+.btn-submit::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transform: skewX(-25deg);
+    transition: 0.5s;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 25px rgba(226,179,64,0.3);
+}
+.btn-submit:hover::after { left: 150%; }
+
+.error-badge {
+    background: rgba(231,76,60,0.15);
+    border: 1px solid rgba(231,76,60,0.3);
+    color: var(--red);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    animation: shake 0.5s ease;
+}
+.error-badge svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.back-nav {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.back-nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.back-nav a:hover {
+    color: var(--gold);
+    transform: translateX(-3px);
+}
+.back-nav svg { width: 16px; height: 16px; }
 
 /* --- Form Elements --- */
 .form-group { display: flex; flex-direction: column; gap: 0.4rem; }

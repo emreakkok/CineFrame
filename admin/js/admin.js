@@ -130,14 +130,26 @@ async function addMovieFromTMDB(tmdbId, btn) {
             ? credits.crew.find(c => c.job === 'Director')
             : null;
 
-        // Backend'e gönder
+        // MİMARİ KARAR: Kadro Modu verilerini (Yıl, Tür, Yönetmen, Oyuncular) oyun esnasında anlık TMDB API'den çekmek
+        // yerine, Admin film eklerken çekip SQLite'a kaydediyoruz. 
+        // Nedenleri:
+        // 1. Performans: Oyun oynanırken oluşan API gecikmeleri ve limitleri engellenir.
+        // 2. Kararlılık: TMDB'deki oyuncu sırası zamanla değişebilir, oyunun stabilitesi korunur.
+        // 3. Offline Yeteneği: Tüm veriler yerelde olduğu için harici bağımlılık azalır.
+        const cast = credits.cast || [];
         const payload = {
             title: detail.title || detailEn.title,
             title_en: detailEn.title || detail.original_title,
             year: detail.release_date ? parseInt(detail.release_date.substring(0, 4)) : 0,
             director: director ? director.name : 'Bilinmiyor',
             tmdb_id: tmdbId,
-            overview: detail.overview || detailEn.overview || ''
+            overview: detail.overview || detailEn.overview || '',
+            genre: (detail.genres && detail.genres.length > 0) ? detail.genres.map(g => g.name).join(', ') : 'Bilinmiyor',
+            runtime: detail.runtime ? parseInt(detail.runtime) : 0,
+            image_path: detail.poster_path ? `https://image.tmdb.org/t/p/w500${detail.poster_path}` : '',
+            cast_lead: cast[0] ? cast[0].name : 'Bilinmiyor',
+            cast_second: cast[1] ? cast[1].name : 'Bilinmiyor',
+            cast_third: cast[2] ? cast[2].name : 'Bilinmiyor'
         };
 
         const saveRes = await fetch('process.php?action=add_movie', {

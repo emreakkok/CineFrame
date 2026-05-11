@@ -46,6 +46,12 @@ switch ($action) {
     case 'delete_poster_date':
         handleDeletePosterDate($pdo);
         break;
+    case 'assign_cast_date':
+        handleAssignCastDate($pdo);
+        break;
+    case 'delete_cast_date':
+        handleDeleteCastDate($pdo);
+        break;
     default:
         header('Location: dashboard.php');
         exit;
@@ -80,6 +86,12 @@ function handleAddMovie(PDO $pdo): void
     $director = trim($input['director'] ?? '');
     $tmdbId   = intval($input['tmdb_id'] ?? 0);
     $overview = trim($input['overview'] ?? '');
+    $genre    = trim($input['genre'] ?? '');
+    $runtime  = intval($input['runtime'] ?? 0);
+    $imagePath = trim($input['image_path'] ?? '');
+    $castLead = trim($input['cast_lead'] ?? '');
+    $castSecond = trim($input['cast_second'] ?? '');
+    $castThird = trim($input['cast_third'] ?? '');
 
     if (empty($title) || empty($titleEn) || $year <= 0) {
         echo json_encode(['success' => false, 'error' => 'Eksik film bilgisi.']);
@@ -98,8 +110,8 @@ function handleAddMovie(PDO $pdo): void
 
     try {
         $stmt = $pdo->prepare("
-            INSERT INTO movies (title, title_en, year, director, tmdb_id, overview, image_path)
-            VALUES (:title, :title_en, :year, :director, :tmdb_id, :overview, '')
+            INSERT INTO movies (title, title_en, year, director, tmdb_id, overview, image_path, genre, cast_lead, cast_second, cast_third, runtime)
+            VALUES (:title, :title_en, :year, :director, :tmdb_id, :overview, :image_path, :genre, :cast_lead, :cast_second, :cast_third, :runtime)
         ");
         $stmt->execute([
             ':title'    => $title,
@@ -107,7 +119,13 @@ function handleAddMovie(PDO $pdo): void
             ':year'     => $year,
             ':director' => $director,
             ':tmdb_id'  => $tmdbId,
-            ':overview' => $overview
+            ':overview' => $overview,
+            ':image_path'=> $imagePath,
+            ':genre'    => $genre,
+            ':cast_lead' => $castLead,
+            ':cast_second' => $castSecond,
+            ':cast_third' => $castThird,
+            ':runtime'  => $runtime
         ]);
 
         $movieId = $pdo->lastInsertId();
@@ -324,6 +342,64 @@ function handleDeletePosterDate(PDO $pdo): void
     try {
         $pdo->prepare("DELETE FROM poster_game_dates WHERE id = :id")->execute([':id' => $id]);
         $_SESSION['flash_success'] = 'Poster Tarih ataması silindi.';
+    } catch (PDOException $e) {
+        $_SESSION['flash_error'] = 'Silme hatası: ' . $e->getMessage();
+    }
+
+    header('Location: dashboard.php');
+    exit;
+}
+
+/**
+ * Filme Kadro (Cast) oyun tarihi ata.
+ */
+function handleAssignCastDate(PDO $pdo): void
+{
+    $movieId  = intval($_POST['movie_id'] ?? 0);
+    $gameDate = trim($_POST['game_date'] ?? '');
+
+    if ($movieId <= 0 || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $gameDate)) {
+        $_SESSION['flash_error'] = 'Geçersiz film veya tarih.';
+        header('Location: dashboard.php');
+        exit;
+    }
+
+    try {
+        $stmt = $pdo->prepare("
+            INSERT INTO cast_game_dates (movie_id, game_date)
+            VALUES (:mid, :date)
+        ");
+        $stmt->execute([':mid' => $movieId, ':date' => $gameDate]);
+
+        $_SESSION['flash_success'] = "Kadro (Cast) Tarihi başarıyla atandı: {$gameDate}";
+    } catch (PDOException $e) {
+        if (strpos($e->getMessage(), 'UNIQUE') !== false) {
+            $_SESSION['flash_error'] = "Bu Kadro tarihi ({$gameDate}) zaten başka bir filme atanmış.";
+        } else {
+            $_SESSION['flash_error'] = 'Veritabanı hatası: ' . $e->getMessage();
+        }
+    }
+
+    header('Location: dashboard.php');
+    exit;
+}
+
+/**
+ * Kadro oyun tarihi atamasını sil.
+ */
+function handleDeleteCastDate(PDO $pdo): void
+{
+    $id = intval($_GET['id'] ?? 0);
+
+    if ($id <= 0) {
+        $_SESSION['flash_error'] = 'Geçersiz tarih ID.';
+        header('Location: dashboard.php');
+        exit;
+    }
+
+    try {
+        $pdo->prepare("DELETE FROM cast_game_dates WHERE id = :id")->execute([':id' => $id]);
+        $_SESSION['flash_success'] = 'Kadro Tarih ataması silindi.';
     } catch (PDOException $e) {
         $_SESSION['flash_error'] = 'Silme hatası: ' . $e->getMessage();
     }

@@ -1,0 +1,133 @@
+/* ==============================================
+   CineFrame — Kadro (Cast) Modu Özel Stilleri
+   ============================================== */
+
+.cast-clues-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--glass-border);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+    margin-bottom: 1.5rem;
+}
+
+.cast-clues-container.hidden {
+    display: none;
+}
+
+.cast-clue-item {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    overflow: hidden;
+    /* Başlangıçta gizli — JS .revealed ekleyince açılır */
+    opacity: 0;
+    max-height: 0;
+    margin: 0;
+    border-width: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: opacity 0.45s ease,
+                max-height 0.45s ease,
+                padding 0.35s ease,
+                margin 0.35s ease,
+                border-width 0.35s ease,
+                transform 0.4s ease,
+                background 0.3s ease,
+                border-color 0.3s ease,
+                box-shadow 0.3s ease;
+}
+
+.cast-clues-header h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-family: var(--font-heading);
+    color: var(--text-primary);
+}
+
+.cast-clues-header p {
+    margin: 0.35rem 0 0.7rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.cast-clue-item.revealed {
+    /* Görünür yap */
+    opacity: 1;
+    max-height: 120px;
+    padding: 1rem 1.25rem;
+    margin: 0; /* gap container tarafından yönetiliyor */
+    border-width: 1px;
+    transform: translateY(0);
+    pointer-events: auto;
+    gap: 6px;
+    /* Gold vurgu */
+    background: rgba(226, 179, 64, 0.05);
+    border-color: rgba(226, 179, 64, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.cast-clue-item.revealed::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--gold);
+}
+
+.clue-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.clue-value {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    color: var(--text-primary);
+    font-weight: 500;
+    min-height: 1.5rem;
+}
+
+.clue-value.skeleton {
+    color: transparent;
+    background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+    background-size: 400% 100%;
+    animation: skeleton-loading 2s infinite ease-in-out;
+    border-radius: 4px;
+    width: 50%;
+    min-width: 150px;
+    user-select: none;
+}
+
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.mode-badge {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: var(--bg-primary);
+    -webkit-text-fill-color: var(--bg-primary); /* h1'den gelen şeffaflığı ezmek için */
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    vertical-align: middle;
+    margin-left: 6px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+    transform: translateY(-2px);
+}

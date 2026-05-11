@@ -4,9 +4,10 @@ Her gün yeni bir film bulmacası! 6 görsel ipucuyla filmi tahmin edin.
 
 ## 📋 Özellikler
 
-- **Çift Oyun Modu:**
+- **Üç Oyun Modu:**
   - 🖼️ **Frame Modu**: Her yanlış tahminde 6 farklı sahneden yeni bir görsel açılır.
   - 🎟️ **Poster Modu**: Poster başlangıçta aşırı bulanıktır ve sadece küçük bir kısmı görünür, her yanlış tahminde poster daha da açılır.
+  - 🎭 **Kadro Modu**: Görsel ipucu yoktur. Her yanlış tahminde Vizyon Yılı/Tür, Yönetmen ve oyuncu bilgileri sırasıyla açılır.
 - **Günlük Bulmaca**: Her gün yeni bir film sorulur.
 - **TMDB Entegrasyonu**: Arama çubuğunda anlık film önerileri ve otomatik poster çekimi.
 - **Admin Paneli**: Her iki mod için film ekleme, görsel yükleme, özel tarih atama.
@@ -59,7 +60,7 @@ http://localhost/CineFrame/setup.php
 
 Bu işlem:
 - `database.sqlite` dosyasını oluşturur
-- Gerekli tabloları kurar (movies, game_dates, poster_game_dates, movie_images, admin_users)
+- Gerekli tabloları kurar (movies, game_dates, poster_game_dates, cast_game_dates, movie_images, admin_users)
 - Varsayılan admin kullanıcısı oluşturur (`admin` / `admin123`)
 - Veritabanı **boş** oluşturulur — filmler admin panelinden eklenir
 
@@ -86,12 +87,14 @@ http://localhost/CineFrame/
 CineFrame/
 ├── index.php              → Ana oyun sayfası (Frame UI)
 ├── poster.php             → Poster modu ana sayfası
+├── cast.php               → Kadro modu ana sayfası
 ├── setup.php              → Veritabanı kurulumu (bir kez çalıştırılır)
 ├── config.php             → Hassas ayarlar (API key) — GİT'E YÜKLENMEZ
 ├── config.example.php     → Konfigürasyon şablonu
 ├── api/
 │   ├── game.php           → Frame Modu oyun API'si
 │   ├── poster_game.php    → Poster Modu oyun API'si
+│   ├── cast_game.php      → Kadro Modu oyun API'si
 │   └── tmdb_proxy.php     → TMDB API proxy (key sunucuda kalır)
 ├── admin/
 │   ├── admin.php          → Admin giriş sayfası
@@ -101,10 +104,12 @@ CineFrame/
 │   └── js/admin.js        → Admin panel JS
 ├── css/
 │   ├── style.css          → Frame oyun arayüzü stilleri
-│   └── poster.css         → Poster oyun arayüzü stilleri
+│   ├── poster.css         → Poster oyun arayüzü stilleri
+│   └── cast.css           → Kadro oyun arayüzü stilleri
 ├── js/
 │   ├── app.js             → Frame modu mantığı
-│   └── poster.js          → Poster modu mantığı
+│   ├── poster.js          → Poster modu mantığı
+│   └── cast.js            → Kadro modu mantığı
 ├── assets/uploads/        → Yüklenen görseller — GİT'E YÜKLENMEZ
 ├── .gitignore
 └── README.md
@@ -130,6 +135,7 @@ CineFrame/
 
 - **Frame Modu:** Yanlış tahminlerde yeni görsel sahneler (ipuçları) açılır.
 - **Poster Modu:** Yanlış tahminlerde gizlenmiş veya çok bulanık olan film afişi yavaş yavaş netleşerek görünür hale gelir.
+- **Kadro Modu:** Görsel ipucu yoktur; Yanlış tahminlerde Vizyon Yılı/Tür, Yönetmen ve oyuncu isimleri sırasıyla açılır.
 
 ## 🔧 Teknolojiler
 
